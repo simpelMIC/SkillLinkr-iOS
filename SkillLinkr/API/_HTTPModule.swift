@@ -179,7 +179,7 @@ class HTTPManager {
         task.resume()
     }
     
-    func getUser(completion: @escaping (Result<User, Error>) -> Void) {
+    func getLoggedInUser(completion: @escaping (Result<User, Error>) -> Void) {
         guard let url = URL(string: "\(DataManager().load(forKey: "apiURL") ?? defaultAPIURL)/user") else {
             let errorResponse = ErrorResponse(status: "Invalid API URL", message: "Invalid API URL")
             completion(.failure(errorResponse))
@@ -211,8 +211,8 @@ class HTTPManager {
             
             if httpResponse.statusCode == 200 {
                 do {
-                    let userResponse = try JSONDecoder().decode(User.self, from: data)
-                    completion(.success(userResponse))
+                    let userResponse = try JSONDecoder().decode(UserResponse.self, from: data)
+                    completion(.success(userResponse.message))
                 } catch let decodeError {
                     let responseString = String(data: data, encoding: .utf8) ?? "Unable to parse response"
                     let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to decode response: \(decodeError). Response: \(responseString)"])
@@ -237,7 +237,7 @@ class HTTPManager {
         task.resume()
     }
     
-    func getOtherUser(id: String, completion: @escaping (Result<User, Error>) -> Void) {
+    func getUser(id: String, completion: @escaping (Result<User, Error>) -> Void) {
         guard let url = URL(string: "\(DataManager().load(forKey: "apiURL") ?? defaultAPIURL)/user/other/\(id)") else {
             let errorResponse = ErrorResponse(status: "Invalid API URL", message: "Invalid API URL")
             completion(.failure(errorResponse))
@@ -249,6 +249,7 @@ class HTTPManager {
             completion(.failure(errorResponse))
             return
         }
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -268,8 +269,9 @@ class HTTPManager {
             
             if httpResponse.statusCode == 200 {
                 do {
-                    let userResponse = try JSONDecoder().decode(User.self, from: data)
-                    completion(.success(userResponse))
+                    let userResponse = try JSONDecoder().decode(UserResponse.self, from: data)
+                    completion(.success(userResponse.message))
+                    print(userResponse)
                 } catch let decodeError {
                     let responseString = String(data: data, encoding: .utf8) ?? "Unable to parse response"
                     let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to decode response: \(decodeError). Response: \(responseString)"])

@@ -8,22 +8,24 @@
 import Foundation
 import Security
 
+let defaultUser = User(id: "", firstname: "Max", lastname: "Mustermann", mail: "max@mustermann.de", released: true, role: UserRole(id: 2, name: "User", description: "hoishdf", createdAt: "", updatedAt: ""), profilePictureName: "", biography: "iof uisdfhiudsfhgiuhds uig dhsif dhsiuf iuh oi UHo IFho iH doih uiodfH IodHUiodfHUioh FIU ufdhios ufhids", updatedAt: "", createdAt: "")
+
 let defaultAPIURL = "https://skilllinkr.micstudios.de/api"
 
-struct User: Codable, Equatable, Identifiable {
+struct User: Codable, Equatable {
     var id: String
     var firstname: String
     var lastname: String
     var mail: String
-    var biography: String?
     var released: Bool
     var role: UserRole
     var profilePictureName: String?
+    var biography: String?
     var updatedAt: String
     var createdAt: String
 }
 
-struct UserRole: Codable, Equatable, Identifiable {
+struct UserRole: Codable, Equatable {
     var id: Int
     var name: String
     var description: String
@@ -83,5 +85,11 @@ class SecureDataManager {
             return token
         }
         return nil
+    }
+}
+
+extension String {
+    var withZeroWidthSpaces: String {
+        map({ String($0) }).joined(separator: "\u{200B}")
     }
 }

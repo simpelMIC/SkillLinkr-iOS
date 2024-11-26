@@ -17,7 +17,7 @@ struct ContentView: View {
     @State var appStage: AppStage = .loading
     
     var body: some View {
-        NavigationView {
+        VStack {
             if appStage == .loading {
                 LoadingView()
             } else if appStage == .onboarding {
@@ -29,7 +29,7 @@ struct ContentView: View {
                     }
                 }
             } else if appStage == .loggedIn {
-                Text("Logged In")
+                AppViewManager()
             }
         }
         .task {
@@ -66,6 +66,37 @@ struct LoadingView: View {
             .shadow(radius: 10)
             .padding()
         ProgressView()
+    }
+}
+
+struct ErrorView: View {
+    @State var error: String
+    var retry: () -> Void
+    var body: some View {
+        VStack {
+            Image(systemName: "camera.fill")
+                .font(.largeTitle)
+                .foregroundStyle(.accent)
+            Text("Please take a screenshot of this and send it to the developer:")
+                .font(.largeTitle)
+                .foregroundStyle(.accent)
+            Text(error.withZeroWidthSpaces)
+            HStack {
+                Button("Retry") {
+                    retry()
+                }
+                .buttonStyle(.borderedProminent)
+                Button("Copy error") {
+                    copyError()
+                }
+                .buttonStyle(.bordered)
+            }
+        }
+        .padding()
+    }
+    
+    func copyError() {
+        UIPasteboard.general.string = error
     }
 }
 
