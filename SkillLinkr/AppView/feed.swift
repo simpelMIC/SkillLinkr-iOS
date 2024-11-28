@@ -10,6 +10,9 @@ import Foundation
 
 struct FeedView: View {
     var body: some View {
-        Text("Feed")
+        List {
+            
+        }
+        .navigationTitle("Feed")
     }
 }

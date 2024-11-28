@@ -9,11 +9,14 @@ import SwiftUI
 import Foundation
 
 struct SettingsView: View {
+    @State var user: User?
     var body: some View {
         List {
-            Section("Your Account") {
-                Button("Edit profile") {
-                    
+            if let user = self.user {
+                Section("Your Account") {
+                    NavigationLink("Edit profile") {
+                        EditProfileView(user: user)
+                    }
                 }
             }
             Section("How you use SkillLinkr") {
@@ -81,5 +84,11 @@ struct SettingsView: View {
         }
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.large)
+    }
+}
+
+#Preview {
+    NavigationView {
+        SettingsView()
     }
 }

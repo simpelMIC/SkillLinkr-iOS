@@ -10,37 +10,39 @@ import Foundation
 
 struct AppViewManager: View {
     var body: some View {
-        NavigationStack {
-            TabView {
-                VStack {
-                    FeedView()
-                }
-                .tabItem {
-                    Image(systemName: "list.bullet")
-                    Text("Feed")
-                }
-                VStack {
-                    SearchView()
-                }
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("Search")
-                }
-                VStack {
-                    ProfileView()
-                }
-                .tabItem {
-                    Image(systemName: "person.fill")
-                    Text("Profile")
-                }
-                VStack {
-                    SettingsView()
-                }
-                .tabItem {
-                    Image(systemName: "gearshape.fill")
-                    Text("Settings")
-                }
+        TabView {
+            NavigationStack {
+                FeedView()
+            }
+            .tabItem {
+                Image(systemName: "list.bullet")
+                Text("Feed")
+            }
+            NavigationStack {
+                SearchView()
+            }
+            .tabItem {
+                Image(systemName: "magnifyingglass")
+                Text("Search")
+            }
+            NavigationStack {
+                MessengerView()
+            }
+            .tabItem {
+                Image(systemName: "bubble.fill")
+                Text("Messages")
+            }
+            NavigationView {
+                ProfileView(userSource: .loggedIn)
+            }
+            .tabItem {
+                Image(systemName: "person.fill")
+                Text("Profile")
             }
         }
     }
+}
+
+#Preview {
+    AppViewManager()
 }
